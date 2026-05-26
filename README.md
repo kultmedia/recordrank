@@ -24,10 +24,3 @@ under `backend/data`, which is ignored by git.
 
 Copy `backend/config.example.php` to `backend/config.php` on your server and set
 your API key there.
-
-## Security note
-
-Because the frontend is a static GitHub Pages app, `VITE_API_KEY` and
-`VITE_ADMIN_PASSWORD` are visible in the built JavaScript. This is intentionally
-simple and fine for a private/lightweight utility, but it is not strong
-authentication.

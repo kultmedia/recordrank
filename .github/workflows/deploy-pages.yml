@@ -18,6 +18,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+      VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+      VITE_ADMIN_PASSWORD: ${{ secrets.VITE_ADMIN_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,12 +35,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify build environment
+        run: |
+          test -n "$VITE_API_BASE_URL" || (echo "Missing VITE_API_BASE_URL" && exit 1)
+          test -n "$VITE_API_KEY" || (echo "Missing VITE_API_KEY" && exit 1)
+          test -n "$VITE_ADMIN_PASSWORD" || (echo "Missing VITE_ADMIN_PASSWORD" && exit 1)
+
       - name: Build
         run: npm run build
-        env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
-          VITE_ADMIN_PASSWORD: ${{ secrets.VITE_ADMIN_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
